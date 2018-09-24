@@ -46,7 +46,3 @@ class TestPerturbation(unittest.TestCase):
                     self.assertAlmostEqual(-0.5, v)
                 else:
                     self.assertAlmostEqual(0.5, v)
-
-    def test_variable_shape_too_long(self):
-        with self.assertRaises(NotImplementedError):
-            Perturbation(max_variable_shape=(1, 2, 3, 4))

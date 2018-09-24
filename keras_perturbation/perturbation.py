@@ -10,8 +10,6 @@ class Perturbation(keras.layers.Layer):
                  constraint=Clip(min_value=-1e5, max_value=1e5),
                  **kwargs):
         self.variable_len = len(max_variable_shape)
-        if self.variable_len > 3:
-            raise NotImplementedError('The length of variable shape is too long: %s' % str(max_variable_shape))
         self.max_variable_shape = list(max_variable_shape)
         self.constraint = keras.constraints.get(constraint)
         self.supports_masking = True
@@ -44,15 +42,8 @@ class Perturbation(keras.layers.Layer):
         return tuple([None] * self.variable_len) + input_shape[self.variable_len:]
 
     def get_perturbation(self, shape):
-        end_0 = shape[0]
-        if self.variable_len == 1:
-            return self.perturbation[:end_0]
-        end_1 = shape[1]
-        if self.variable_len == 2:
-            return self.perturbation[:end_0, :end_1]
-        end_2 = shape[2]
-        if self.variable_len == 3:
-            return self.perturbation[:end_0, :end_1, :end_2]
+        key = tuple(slice(None, shape[i], None) for i in range(self.variable_len))
+        return self.perturbation[key]
 
     def get_perturbation_values(self, shape):
         key = tuple(slice(None, x, None) for x in shape)
