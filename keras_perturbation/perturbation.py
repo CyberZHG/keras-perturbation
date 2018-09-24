@@ -28,7 +28,8 @@ class Perturbation(keras.layers.Layer):
         self.perturbation = self.add_weight(shape=tuple(self.max_variable_shape) + input_shape[self.variable_len:],
                                             name='{}_W'.format(self.name),
                                             constraint=self.constraint,
-                                            initializer=keras.initializers.get('glorot_normal'))
+                                            initializer=keras.initializers.get('zeros'),
+                                            dtype=K.floatx())
         super(Perturbation, self).build(input_shape)
 
     def call(self, inputs, **kwargs):
