@@ -2,13 +2,13 @@ from setuptools import setup
 
 setup(
     name='keras-perturbation',
-    version='0.1',
+    version='0.2',
     packages=['keras_perturbation'],
     url='https://github.com/CyberZHG/keras-perturbation',
     license='MIT',
     author='CyberZHG',
     author_email='CyberZHG@gmail.com',
-    description='',
+    description='A demonstration of perturbation of data',
     long_description=open('README.rst', 'r').read(),
     install_requires=[
         'numpy',
