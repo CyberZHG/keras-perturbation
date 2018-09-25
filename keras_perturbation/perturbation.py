@@ -7,10 +7,12 @@ class Perturbation(keras.layers.Layer):
 
     def __init__(self,
                  max_variable_shape,
+                 initializer='zeros',
                  constraint=Clip(min_value=-1e5, max_value=1e5),
                  **kwargs):
         self.variable_len = len(max_variable_shape)
         self.max_variable_shape = list(max_variable_shape)
+        self.initializer = keras.initializers.get(initializer)
         self.constraint = keras.constraints.get(constraint)
         self.supports_masking = True
         self.perturbation = None
@@ -19,6 +21,7 @@ class Perturbation(keras.layers.Layer):
     def get_config(self):
         config = {
             'max_variable_shape': self.max_variable_shape,
+            'initializer': self.initializer,
             'constraint': self.constraint,
         }
         base_config = super(Perturbation, self).get_config()
@@ -27,8 +30,8 @@ class Perturbation(keras.layers.Layer):
     def build(self, input_shape):
         self.perturbation = self.add_weight(shape=tuple(self.max_variable_shape) + input_shape[self.variable_len:],
                                             name='{}_W'.format(self.name),
+                                            initializer=self.initializer,
                                             constraint=self.constraint,
-                                            initializer=keras.initializers.get('zeros'),
                                             dtype=K.floatx())
         super(Perturbation, self).build(input_shape)
 

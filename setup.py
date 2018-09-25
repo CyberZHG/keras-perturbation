@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='keras-perturbation',
-    version='0.2',
+    version='0.3',
     packages=['keras_perturbation'],
     url='https://github.com/CyberZHG/keras-perturbation',
     license='MIT',
