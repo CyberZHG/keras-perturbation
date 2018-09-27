@@ -115,11 +115,13 @@ if os.path.exists(perturbation_path):
 else:
     perturbations = np.zeros_like(x_train, dtype=K.floatx())
     steps = (train_len + BATCH_SIZE - 1) // BATCH_SIZE
+    perturbation_layer = model.get_layer(name='Perturbation')
     for i in range(steps):
         interval = slice(i * BATCH_SIZE, min(train_len, (i + 1) * BATCH_SIZE))
         print('%d/%d' % (interval.stop, train_len), end='\r')
         x_sub = x_train[interval]
         y_sub = y_train[interval]
+        model.optimizer.iterations.assign(0)
         model.load_weights(model_training_path, by_name=True)
         model.fit(
             x_sub,
@@ -132,7 +134,7 @@ else:
                 keras.callbacks.EarlyStopping(monitor='loss', patience=2),
             ],
         )
-        perturbations[interval] = model.layers[1].get_perturbation_values((interval.stop - interval.start,))
+        perturbations[interval] = perturbation_layer.get_perturbation_values((interval.stop - interval.start,))
     print('')
     with open(perturbation_path, 'wb') as writer:
         pickle.dump(perturbations, writer)
