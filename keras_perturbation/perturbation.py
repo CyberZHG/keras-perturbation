@@ -21,8 +21,8 @@ class Perturbation(keras.layers.Layer):
     def get_config(self):
         config = {
             'max_variable_shape': self.max_variable_shape,
-            'initializer': self.initializer,
-            'constraint': self.constraint,
+            'initializer': keras.initializers.serialize(self.initializer),
+            'constraint': keras.constraints.serialize(self.constraint),
         }
         base_config = super(Perturbation, self).get_config()
         return dict(list(base_config.items()) + list(config.items()))
